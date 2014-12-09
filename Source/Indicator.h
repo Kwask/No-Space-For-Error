@@ -53,7 +53,7 @@ void Indicator::close(){
 }
 
 void Indicator::render(){
-  if( level >= 100.f ){
+  if( level >= 98.f ){
     texture.setCurrentFrame( 5 );
   }else if( level >= 80.f ){
     texture.setCurrentFrame( 4 );
@@ -61,7 +61,7 @@ void Indicator::render(){
     texture.setCurrentFrame( 3 );
   }else if( level >= 40.f ){
     texture.setCurrentFrame( 2 );
-  }else if( level >= 20.f ){
+  }else if( level >= 10.f ){
     texture.setCurrentFrame( 1 );
   }else{
     texture.setCurrentFrame( 0 );

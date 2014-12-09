@@ -134,6 +134,10 @@ void Machine::render(){
 
 void Machine::idle( double fps ){
   if( broken ){
+    if( type == MACH_DRIVE ){
+      linked_gauge->setLevel( 0.f );
+    }
+
     texture.setFrameRange( broken_begin, broken_end );
     texture.setAnimated( animated_broken );
     texture.setFrameTime( 0.2f );
@@ -172,7 +176,7 @@ void Machine::setType( MachineType type ){
   int length = 0;
   int height = 0;
   int frames = 0;
-  int rows;
+  int rows = 0;
 
   double frame_time;
 

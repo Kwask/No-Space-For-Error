@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="LD31" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin/Debug/No Space For Error" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+				</Compiler>
+			</Target>
+			<Target title="Release">
+				<Option output="bin/Release/No Space For Error" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="0" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+			<Add directory="../../../../Development Libraries/Mac/include" />
+		</Compiler>
+		<Linker>
+			<Add option="-framework CoreFoundation" />
+			<Add option="-framework OpenGL" />
+			<Add option="-lglfw3" />
+			<Add library="/Users/hirzelcn/Google Drive/Code/Development Libraries/Mac/lib/libSOIL.a" />
+			<Add directory="../../../../Development Libraries/Mac/lib" />
+		</Linker>
+		<Unit filename="Engine.h" />
+		<Unit filename="Gauge.h" />
+		<Unit filename="Indicator.h" />
+		<Unit filename="Machine.h" />
+		<Unit filename="Rect.h" />
+		<Unit filename="Sprite.h" />
+		<Unit filename="Tool.h" />
+		<Unit filename="gameFuncs.h" />
+		<Unit filename="imgLoader.h" />
+		<Unit filename="main.cpp" />
+		<Unit filename="renderFuncs.h" />
+		<Extensions>
+			<code_completion />
+			<envvars />
+			<debugger />
+			<lib_finder disable_auto="1" />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

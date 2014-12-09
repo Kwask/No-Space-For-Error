@@ -2,10 +2,9 @@
 #define ENGINE_H_INCLUDED
 
 #include <iostream>
-#include <GL/glew.h>
 #include <GLFW/glfw3.h>
-#include <windows.h>
 #include <vector>
+#include <windows.h>
 
 #include "Sprite.h"
 #include "Tool.h"
@@ -164,11 +163,6 @@ bool Engine::init(){
 
   glEnable( GL_BLEND );
   glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
-
-  GLenum error = glewInit();
-  if( GLEW_OK != error ){
-    std::cout << "GLEW failed to initialize! GLEW Error: " << glewGetErrorString( error ) << std::endl;
-  }
 
   return success;
 }
@@ -332,7 +326,7 @@ void Engine::setupMachines(){
                                      &textures[TEX_CABLES] ));
 
     double restore = machines.back()->getRestore();
-    machines.back()->setRestore( restore/cable_count );
+    machines.back()->setRestore(( restore*1.5f )/( cable_count ) );
 
     machines.back()->setHitbox( Rect<GLfloat>( 148+14*i, 68, 6, 16 ));
   }
@@ -345,15 +339,16 @@ void Engine::setupMachines(){
                                      &textures[TEX_FIRE] ));
 
     double restore = machines.back()->getRestore();
-    machines.back()->setRestore( restore/fire_count );
+    machines.back()->setRestore( restore/( fire_count+2 ));
   }
 
   unsigned int size = machines.size();
-  machines.at( size-5 )->setHitbox( Rect<GLfloat>( 55, 120, 10, 10 ));
-  machines.at( size-4 )->setHitbox( Rect<GLfloat>( 70, 134, 10, 10 ));
-  machines.at( size-3 )->setHitbox( Rect<GLfloat>( 150, 93, 10, 10 ));
-  machines.at( size-2 )->setHitbox( Rect<GLfloat>( 127, 100, 10, 10 ));
-  machines.at( size-1 )->setHitbox( Rect<GLfloat>( 135, 115, 10, 10 ));
+  int fire_scale = 25;
+  machines.at( size-5 )->setHitbox( Rect<GLfloat>( 25, 110, fire_scale, fire_scale ));
+  machines.at( size-4 )->setHitbox( Rect<GLfloat>( 70, 120, fire_scale, fire_scale ));
+  machines.at( size-3 )->setHitbox( Rect<GLfloat>( 150, 77, fire_scale, fire_scale ));
+  machines.at( size-2 )->setHitbox( Rect<GLfloat>( 120, 95, fire_scale, fire_scale ));
+  machines.at( size-1 )->setHitbox( Rect<GLfloat>( 160, 115, fire_scale, fire_scale ));
 
 
   machines.push_back( new Machine( MACH_DRIVE,
@@ -361,6 +356,7 @@ void Engine::setupMachines(){
                                    &gauges[GAUGE_DRIVE],
                                    &textures[TEX_DRIVE] ));
   machines.back()->setHitbox( Rect<GLfloat>( 4, 56, 94, 59 ));
+  machines.back()->setRestore( machines.back()->getRestore()*3.f );
 }
 
 void Engine::cleanupMachines(){
@@ -388,7 +384,9 @@ void Engine::handleGauges(){
     lose = true;
   }
 
-  machines.back()->setRestore(( gauges[GAUGE_POWER].getLevel()/100.f )*30.f );
+  gauges[GAUGE_POWER].setDecay(( gauges[GAUGE_POWER].getLevel()/100.f )*10.f+20.f );
+
+  machines.back()->setRestore(( gauges[GAUGE_POWER].getLevel()/100.f )*90.f );
 
   for( int i = 0; i < GAUGE_TOTAL; i++ ){
     gauges[i].idle( fps );
@@ -520,7 +518,8 @@ void Engine::render(){
     gauges[i].render();
   }
 
-  for( unsigned int i = 0; i < machines.size(); i++ ){
+  machines.back()->render();
+  for( unsigned int i = 0; i < machines.size()-1; i++ ){
     machines[i]->render();
   }
 
@@ -534,10 +533,15 @@ void Engine::render(){
 }
 
 void Engine::shakeScreen( int mod ){
-  double shake_x = (-1*rand()%2 )*(float)mod;
-  double shake_y = (-1*rand()%2 )*(float)mod;
+  double shake_x = (float)mod;
+  double shake_y = (float)mod;
 
-  for( int i; i < TOOL_TOTAL; i++ ){
+  if( rand()%2 ){
+    shake_x = shake_x*-1;
+    shake_y = shake_y*-1;
+  }
+
+  for( int i = 0; i < TOOL_TOTAL; i++ ){
     double speed_x = tools[i].getSpeedX();
     double speed_y = tools[i].getSpeedY();
     speed_x += shake_x;
@@ -588,7 +592,6 @@ void Engine::keyCallback( GLFWwindow* window, int key, int scancode, int action,
     }
   }
 }
-
 
 void Engine::keyCallbackSim( GLFWwindow* window, int key, int scancode, int action, int mods ){
   getInstance()->keyCallback( window, key, scancode, action, mods );

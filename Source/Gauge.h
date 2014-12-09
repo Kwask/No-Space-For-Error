@@ -36,6 +36,7 @@ public:
   void setType( GaugeType type );
   void setTexGauge( const Sprite* tex_gauge );
   void setTexIndic( const Sprite* tex_indicator );
+  void setDecay( double decay );
 
 private:
   GaugeType type;
@@ -167,6 +168,10 @@ void Gauge::setTexGauge( const Sprite* tex_gauge ){
 
 void Gauge::setTexIndic( const Sprite* tex_indicator ){
   indicator.setTexture( tex_indicator );
+}
+
+void Gauge::setDecay( double decay ){
+  indicator.setDecay( decay );
 }
 
 #endif // GAUGE_H_INCLUDED
